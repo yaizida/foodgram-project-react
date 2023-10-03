@@ -164,7 +164,8 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
         ]
 
     def validate_cooking_time(self, value):
-        if value < settings.MIN_COOKING_TIME or value > settings.MAX_COOKING_TIME:
+        if value < settings.MIN_COOKING_TIME or (
+            value > settings.MAX_COOKING_TIME):
             raise serializers.ValidationError(
                 'Пожалуйста, указывайте адекватное время готовки!'
             )
