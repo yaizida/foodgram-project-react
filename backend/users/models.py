@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 
 class User(AbstractUser):
@@ -14,32 +15,32 @@ class User(AbstractUser):
     ]
     email = models.EmailField(
         'Адрес эл.почты',
-        max_length=254,
+        max_length=settings.USER_EMAIL_MAX_LENGTH,
         unique=True,
     )
     username = models.CharField(
         'Имя пользователя',
-        max_length=150,
+        max_length=settings.USER_MAX_LENGTH,
         unique=True,
         validators=[RegexValidator(regex=r'^[\w.@+-]+$')],
     )
     first_name = models.CharField(
         'Имя',
-        max_length=150,
+        max_length=settings.USER_MAX_LENGTH,
     )
     last_name = models.CharField(
         'Фамилия',
-        max_length=150,
+        max_length=settings.USER_MAX_LENGTH,
     )
     password = models.CharField(
         'Пароль',
-        max_length=150,
+        max_length=settings.USER_MAX_LENGTH,
     )
     role = models.CharField(
         'Права пользователя',
         choices=ROLE_CHOICES,
         default=USER,
-        max_length=5,
+        max_length=settings.USER_ROLE,
     )
 
     class Meta:

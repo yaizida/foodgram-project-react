@@ -130,3 +130,15 @@ DJOSER = {
         'user_list': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
     },
 }
+
+# Constants
+MIN_COOKING_TIME = 1
+MAX_COOKING_TIME = 10080
+MIN_ING_AMOUNT = 1
+MAX_ING_AMOUNT = 5000
+NAME_LIMIT = 15
+MAX_LENGTH = 200
+USER_MAX_LENGTH = 150
+USER_EMAIL_MAX_LENGTH = 254
+COLOR_TAG = 7
+USER_ROLE = 5

@@ -48,24 +48,23 @@ DB_PORT                 # 5432 (порт по умолчанию)
 - Создать и запустить контейнеры Docker, выполнить команду на сервере
 *(версии команд "docker compose" или "docker-compose" отличаются в зависимости от установленной версии Docker Compose):*
 ```
-sudo docker compose up -d
+sudo docker compose -f docker-compose.production.yml up -d
 ```
 
 - После успешной сборки выполнить миграции:
 ```
-sudo docker compose exec backend python manage.py migrate
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 ```
 
 - Создать суперпользователя:
 ```
-sudo docker compose exec backend python manage.py createsuperuser
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
 ```
 
 - Собрать статику:
 ```
-sudo docker compose exec backend python manage.py collectstatic --noinput
-sudo docker compose exec backend cp -r /app/collected_static/. /backend_static/static/
-
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
 ```
 
 - Наполнить базу данных:

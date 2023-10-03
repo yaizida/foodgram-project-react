@@ -2,24 +2,19 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 from colorfield.fields import ColorField
+from django.conf import settings
 
 from users.models import User
-
-MIN_COOKING_TIME = 1
-MAX_COOKING_TIME = 10080
-MIN_ING_AMOUNT = 1
-MAX_ING_AMOUNT = 5000
-NAME_LIMIT = 15
 
 
 class Ingredient(models.Model):
     name = models.CharField(
         'Название',
-        max_length=200,
+        max_length=settings.MAX_LENGTH,
     )
     measurement_unit = models.CharField(
         'Единицы измерения',
-        max_length=200,
+        max_length=settings.MAX_LENGTH,
     )
 
     class Meta:
@@ -28,24 +23,24 @@ class Ingredient(models.Model):
         ordering = ('pk',)
 
     def __str__(self):
-        return self.name[:NAME_LIMIT]
+        return self.name[:settings.NAME_LIMIT]
 
 
 class Tag(models.Model):
     name = models.CharField(
         'Название',
         unique=True,
-        max_length=200,
+        max_length=settings.MAX_LENGTH,
     )
     color = ColorField(
         'Цвет',
         default='#FF0000',
-        max_length=7,
+        max_length=settings.COLOR_TAG,
         unique=True,
     )
     slug = models.SlugField(
         'Уникальный слаг',
-        max_length=200,
+        max_length=settings.MAX_LENGTH,
         unique=True,
     )
 
@@ -55,7 +50,7 @@ class Tag(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return self.name[:NAME_LIMIT]
+        return self.name[:settings.NAME_LIMIT]
 
     def clean(self):
         color = self.color.upper()
@@ -72,7 +67,7 @@ class Recipe(models.Model):
     )
     name = models.CharField(
         'Название',
-        max_length=200,
+        max_length=settings.MAX_LENGTH,
     )
     image = models.ImageField(
         'Картинка',
@@ -95,11 +90,11 @@ class Recipe(models.Model):
         'Время приготовления',
         validators=[
             MinValueValidator(
-                MIN_COOKING_TIME,
+                settings.MIN_COOKING_TIME,
                 message='Даже шеф-повар не может так быстро готовить!'
             ),
             MaxValueValidator(
-                MAX_COOKING_TIME,
+                settings.MAX_COOKING_TIME,
                 message='Никто не будет готовить блюдо больше недели!'
             )
         ],
@@ -122,7 +117,7 @@ class Recipe(models.Model):
         ]
 
     def __str__(self):
-        return self.name[:NAME_LIMIT]
+        return self.name[:settings.NAME_LIMIT]
 
 
 class IngredientRecipe(models.Model):
@@ -141,11 +136,11 @@ class IngredientRecipe(models.Model):
         'Количество в рецепте',
         validators=[
             MinValueValidator(
-                MIN_ING_AMOUNT,
+                settings.MIN_ING_AMOUNT,
                 message='Нужно указать нормальное количество!'
             ),
             MaxValueValidator(
-                MAX_ING_AMOUNT,
+                settings.MAX_ING_AMOUNT,
                 message='Кол-во ингредиентов не должно превышать 5000!'
             )
         ],

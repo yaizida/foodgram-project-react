@@ -1,5 +1,6 @@
 import base64
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
@@ -15,10 +16,6 @@ from recipes.models import (
     Favorite,
     ShoppingCart,
     TagRecipe,
-    MIN_COOKING_TIME,
-    MAX_COOKING_TIME,
-    MIN_ING_AMOUNT,
-    MAX_ING_AMOUNT,
 )
 
 
@@ -89,7 +86,7 @@ class IngredientRecipeCreateSerializer(serializers.ModelSerializer):
         model = IngredientRecipe
 
     def validate_amount(self, value):
-        if value < MIN_ING_AMOUNT or value > MAX_ING_AMOUNT:
+        if value < settings.MIN_ING_AMOUNT or value > settings.MAX_ING_AMOUNT:
             raise serializers.ValidationError(
                 'Нужно указать кол-во от 1 до 5000!'
             )
@@ -167,7 +164,7 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
         ]
 
     def validate_cooking_time(self, value):
-        if value < MIN_COOKING_TIME or value > MAX_COOKING_TIME:
+        if value < settings.MIN_COOKING_TIME or value > settings.MAX_COOKING_TIME:
             raise serializers.ValidationError(
                 'Пожалуйста, указывайте адекватное время готовки!'
             )
