@@ -19,8 +19,11 @@ class Command(BaseCommand):
                     )
                 print('Импорт данных завершен!')
         except IntegrityError as error:
-            raise IntegrityError(self.style.ERROR(f'Ошибка при записи данных csv:{error}'))
+            raise IntegrityError(self.style.ERROR(
+                f'Ошибка при записи данных csv:{error}'))
         except FileNotFoundError as error:
-            raise FileNotFoundError(self.style.ERROR(f'Файл csv не найден по пути : {error}'))
+            raise FileNotFoundError(self.style.ERROR(
+                f'Файл csv не найден по пути : {error}'))
         except UnicodeDecodeError as error:
-            raise FileNotFoundError(self.style.ERROR(f'Ошибка при декодировании данных из csv:{error}'))
+            raise FileNotFoundError(self.style.ERROR(
+                f'Ошибка при декодировании данных из csv:{error}'))
