@@ -200,7 +200,6 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
             unique_tags.append(tag)
         return tags
 
-
     def create_ingredients_recipe(self, ingredients, recipe):
         for ingredient in ingredients:
             IngredientRecipe.objects.create(
