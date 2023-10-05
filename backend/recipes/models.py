@@ -21,6 +21,11 @@ class Ingredient(models.Model):
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
         ordering = ('pk',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=("name", "measurement_unit"),
+                name="unique_for_ingridient",
+            ),)
 
     def __str__(self):
         return self.name[:settings.NAME_LIMIT]
@@ -52,11 +57,6 @@ class Tag(models.Model):
     def __str__(self):
         return self.name[:settings.NAME_LIMIT]
 
-    def clean(self):
-        color = self.color.upper()
-        if Tag.objects.filter(color=color).exists():
-            raise ValidationError('Тег такого цвета уже существует!')
-
 
 class Recipe(models.Model):
     author = models.ForeignKey(
@@ -77,9 +77,9 @@ class Recipe(models.Model):
         'Описание',
     )
     ingredients = models.ManyToManyField(
-        Ingredient,
         through='IngredientRecipe',
         verbose_name='Ингредиенты',
+        to=Ingredient,
     )
     tags = models.ManyToManyField(
         Tag,
@@ -148,28 +148,6 @@ class IngredientRecipe(models.Model):
 
     def __str__(self):
         return f'{self.ingredient} {self.recipe}'
-
-
-class TagRecipe(models.Model):
-    tag = models.ForeignKey(
-        Tag,
-        on_delete=models.CASCADE,
-        verbose_name='Тег',
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        verbose_name='Рецепт',
-    )
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['tag', 'recipe'],
-                                    name='unique_tag'),
-        ]
-
-    def __str__(self):
-        return f'{self.tag} {self.recipe}'
 
 
 class Favorite(models.Model):

@@ -15,7 +15,6 @@ from recipes.models import (
     IngredientRecipe,
     Favorite,
     ShoppingCart,
-    TagRecipe,
 )
 
 
@@ -201,12 +200,6 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
             unique_tags.append(tag)
         return tags
 
-    def create_tags_recipe(self, tags, recipe):
-        for tag in tags:
-            TagRecipe.objects.create(
-                tag_id=tag.id,
-                recipe=recipe
-            )
 
     def create_ingredients_recipe(self, ingredients, recipe):
         for ingredient in ingredients:

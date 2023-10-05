@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
@@ -22,19 +23,17 @@ class User(AbstractUser):
         'Имя пользователя',
         max_length=settings.USER_MAX_LENGTH,
         unique=True,
-        validators=[RegexValidator(regex=r'^[\w.@+-]+$')],
+        validators=[UnicodeUsernameValidator],
     )
     first_name = models.CharField(
         'Имя',
         max_length=settings.USER_MAX_LENGTH,
+        validators=[UnicodeUsernameValidator],
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=settings.USER_MAX_LENGTH,
-    )
-    password = models.CharField(
-        'Пароль',
-        max_length=settings.USER_MAX_LENGTH,
+        validators=[UnicodeUsernameValidator],
     )
     role = models.CharField(
         'Права пользователя',
@@ -78,14 +77,3 @@ class Subscribe(models.Model):
             models.UniqueConstraint(fields=['user', 'author'],
                                     name='unique_subscriber'),
         ]
-
-    def clean(self):
-        if self.user == self.author:
-            raise ValidationError(
-                {'title': 'Нельзя подписаться на самого себя!'}
-            )
-        super().clean()
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
