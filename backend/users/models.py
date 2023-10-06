@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.validators import RegexValidator
 from django.conf import settings
 
 
@@ -8,10 +9,6 @@ class User(AbstractUser):
     USER = 'user'
     ADMIN = 'admin'
 
-    ROLE_CHOICES = [
-        (USER, 'Пользователь'),
-        (ADMIN, 'Администратор'),
-    ]
     email = models.EmailField(
         'Адрес эл.почты',
         max_length=settings.USER_EMAIL_MAX_LENGTH,
@@ -21,21 +18,22 @@ class User(AbstractUser):
         'Имя пользователя',
         max_length=settings.USER_MAX_LENGTH,
         unique=True,
-        validators=[UnicodeUsernameValidator],
+        validators=[UnicodeUsernameValidator()],
     )
     first_name = models.CharField(
         'Имя',
         max_length=settings.USER_MAX_LENGTH,
-        validators=[UnicodeUsernameValidator],
+        validators=RegexValidator(r'^[0-9a-zA-Z]*$',
+                                  'Only alphanumeric characters are allowed.'),
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=settings.USER_MAX_LENGTH,
-        validators=[UnicodeUsernameValidator],
+        validators=RegexValidator(r'^[0-9a-zA-Z]*$',
+                                  'Only alphanumeric characters are allowed.'),
     )
     role = models.CharField(
         'Права пользователя',
-        choices=ROLE_CHOICES,
         default=USER,
         max_length=settings.USER_ROLE,
     )
@@ -48,9 +46,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-    @property
-    def is_admin(self):
-        return self.role == self.ADMIN or self.is_staff
+
 
 
 class Subscribe(models.Model):

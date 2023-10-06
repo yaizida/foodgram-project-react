@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from colorfield.fields import ColorField
+from django.core.validators import RegexValidator
 from django.conf import settings
 
 from users.models import User
@@ -10,6 +11,8 @@ class Ingredient(models.Model):
     name = models.CharField(
         'Название',
         max_length=settings.MAX_LENGTH,
+        validators=RegexValidator(r'^[0-9a-zA-Z]*$',
+                                  'Only alphanumeric characters are allowed.')
     )
     measurement_unit = models.CharField(
         'Единицы измерения',

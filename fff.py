@@ -1,0 +1,1 @@
+error 50 < amount_store > 300
