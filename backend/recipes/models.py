@@ -11,8 +11,9 @@ class Ingredient(models.Model):
     name = models.CharField(
         'Название',
         max_length=settings.MAX_LENGTH,
-        validators=RegexValidator(r'^[0-9a-zA-Z]*$',
-                                  'Only alphanumeric characters are allowed.')
+        validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
+                                   'Only alphanumeric characters are allowed.'
+                                    )]
     )
     measurement_unit = models.CharField(
         'Единицы измерения',
@@ -80,6 +81,7 @@ class Recipe(models.Model):
     )
     ingredients = models.ManyToManyField(
         through='IngredientRecipe',
+        through_fields=('recipe', 'ingredient'),
         verbose_name='Ингредиенты',
         to=Ingredient,
     )
@@ -162,6 +164,7 @@ class Favorite(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
+        related_name='+',
     )
 
     class Meta:
@@ -187,6 +190,7 @@ class ShoppingCart(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
+        related_name='+',
     )
 
     class Meta:

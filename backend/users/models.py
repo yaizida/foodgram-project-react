@@ -23,14 +23,16 @@ class User(AbstractUser):
     first_name = models.CharField(
         'Имя',
         max_length=settings.USER_MAX_LENGTH,
-        validators=RegexValidator(r'^[0-9a-zA-Z]*$',
-                                  'Only alphanumeric characters are allowed.'),
+        validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
+                                   'Only alphanumeric characters are allowed.'
+                                   ),]
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=settings.USER_MAX_LENGTH,
-        validators=RegexValidator(r'^[0-9a-zA-Z]*$',
-                                  'Only alphanumeric characters are allowed.'),
+        validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
+                                   'Only alphanumeric characters are allowed.'
+                                   ),]
     )
     role = models.CharField(
         'Права пользователя',
@@ -45,8 +47,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
-
-
 
 
 class Subscribe(models.Model):
@@ -71,3 +71,6 @@ class Subscribe(models.Model):
             models.UniqueConstraint(fields=['user', 'author'],
                                     name='unique_subscriber'),
         ]
+
+    def __str__(self) -> str:
+        return f'{self.user} подписан на {self.author}'
