@@ -13,7 +13,7 @@ class Ingredient(models.Model):
         max_length=settings.MAX_LENGTH,
         validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
                                    'Only alphanumeric characters are allowed.'
-                                    )]
+                                   )]
     )
     measurement_unit = models.CharField(
         'Единицы измерения',
