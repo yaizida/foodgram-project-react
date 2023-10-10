@@ -25,14 +25,14 @@ class User(AbstractUser):
         max_length=settings.USER_MAX_LENGTH,
         validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
                                    'Only alphanumeric characters are allowed.'
-                                   ),]
+                                   ), ]
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=settings.USER_MAX_LENGTH,
         validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
                                    'Only alphanumeric characters are allowed.'
-                                   ),]
+                                   ), ]
     )
     role = models.CharField(
         'Права пользователя',
