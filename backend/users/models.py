@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.core.validators import RegexValidator
 from django.conf import settings
+
+from validators import alphabet_validator
 
 
 class User(AbstractUser):
-    USER = 'user'
-    ADMIN = 'admin'
 
     email = models.EmailField(
         'Адрес эл.почты',
@@ -23,21 +22,12 @@ class User(AbstractUser):
     first_name = models.CharField(
         'Имя',
         max_length=settings.USER_MAX_LENGTH,
-        validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
-                                   'Only alphanumeric characters are allowed.'
-                                   ), ]
+        validators=[alphabet_validator]
     )
     last_name = models.CharField(
         'Фамилия',
         max_length=settings.USER_MAX_LENGTH,
-        validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
-                                   'Only alphanumeric characters are allowed.'
-                                   ), ]
-    )
-    role = models.CharField(
-        'Права пользователя',
-        default=USER,
-        max_length=settings.USER_ROLE,
+        validators=[alphabet_validator]
     )
 
     class Meta:
@@ -70,6 +60,8 @@ class Subscribe(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['user', 'author'],
                                     name='unique_subscriber'),
+            models.CheckConstraint(check=~models.Q(user=models.F("author")),
+                                   name='author_not_user'),
         ]
 
     def __str__(self) -> str:

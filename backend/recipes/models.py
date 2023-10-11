@@ -1,19 +1,17 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from colorfield.fields import ColorField
-from django.core.validators import RegexValidator
 from django.conf import settings
 
 from users.models import User
+from users.validators import alphabet_validator
 
 
 class Ingredient(models.Model):
     name = models.CharField(
         'Название',
         max_length=settings.MAX_LENGTH,
-        validators=[RegexValidator(r'^[0-9a-zA-Z]*$',
-                                   'Only alphanumeric characters are allowed.'
-                                   )]
+        validators=[alphabet_validator]
     )
     measurement_unit = models.CharField(
         'Единицы измерения',
@@ -39,6 +37,7 @@ class Tag(models.Model):
         'Название',
         unique=True,
         max_length=settings.MAX_LENGTH,
+        validators=[alphabet_validator]
     )
     color = ColorField(
         'Цвет',
@@ -80,10 +79,10 @@ class Recipe(models.Model):
         'Описание',
     )
     ingredients = models.ManyToManyField(
+        Ingredient,
         through='IngredientRecipe',
-        through_fields=('recipe', 'ingredient'),
         verbose_name='Ингредиенты',
-        to=Ingredient,
+        related_name="recipes",
     )
     tags = models.ManyToManyField(
         Tag,
@@ -129,6 +128,7 @@ class IngredientRecipe(models.Model):
         Ingredient,
         on_delete=models.CASCADE,
         verbose_name='Ингредиент',
+        related_name='+'
     )
     recipe = models.ForeignKey(
         Recipe,

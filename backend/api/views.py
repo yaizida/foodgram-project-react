@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
 from django.db.models import Sum
 from django.http import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -53,13 +52,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
-
-    def get_queryset(self):
-        return Recipe.objects.prefetch_related(
-            'recipe_ingredients__ingredient',
-            'tags',
-            'author'
-        ).all()
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -136,7 +128,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return response
 
 
-class CustomUserViewSet(UserViewSet):
+class UserViewSet(viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
