@@ -78,12 +78,6 @@ class Recipe(models.Model):
     text = models.TextField(
         'Описание',
     )
-    ingredients = models.ManyToManyField(
-        Ingredient,
-        through='IngredientRecipe',
-        verbose_name='Ингредиенты',
-        related_name="recipes",
-    )
     tags = models.ManyToManyField(
         Tag,
         through='TagRecipe',
@@ -133,7 +127,7 @@ class IngredientRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='recipe_ingredients',
+        related_name='ingredients',
         verbose_name='Рецепт',
     )
     amount = models.PositiveSmallIntegerField(
@@ -164,7 +158,7 @@ class Favorite(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
-        related_name='+',
+        related_name='favorites+',
     )
 
     class Meta:
@@ -190,7 +184,7 @@ class ShoppingCart(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
-        related_name='+',
+        related_name='shopping_cart+',
     )
 
     class Meta:

@@ -33,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if not user.is_authenticated:
             return False
-        return Subscribe.objects.filter(user=user, author=obj.id).exists()
+        return user.subscribe.filter(author=obj).exists()
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -70,7 +70,7 @@ class IngredientRecipeCreateSerializer(serializers.ModelSerializer):
         model = IngredientRecipe
 
     def validate_amount(self, value):
-        if value < settings.MIN_ING_AMOUNT or value > settings.MAX_ING_AMOUNT:
+        if settings.MAX_ING_AMOUNT < value < settings.MIN_ING_AMOUNT:
             raise serializers.ValidationError(
                 'Нужно указать кол-во от 1 до 5000!'
             )
