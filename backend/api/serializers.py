@@ -248,8 +248,11 @@ class SubscribeSerializer(serializers.ModelSerializer):
         )
         recipes = obj.recipes.all()
         if recipes_limit:
-            recipes = recipes[:int(recipes_limit)]
-            return RecipeCutSerializer(recipes, many=True).data
+            try:
+                recipes = recipes[:int(recipes_limit)]
+                return RecipeCutSerializer(recipes, many=True).data
+            except ValueError as error:
+                print(f'{error}, check recipes_limit')
         else:
             queryset = obj.author_recipes.count()
             return SubscribeSerializer(queryset, many=True).data

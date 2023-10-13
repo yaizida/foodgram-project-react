@@ -153,12 +153,13 @@ class Favorite(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
+        related_name='recipe+'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
-        related_name='favorites+',
+        related_name='user+',
     )
 
     class Meta:
@@ -179,12 +180,13 @@ class ShoppingCart(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
+        related_name='recipe+'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
-        related_name='shopping_cart+',
+        related_name='user+',
     )
 
     class Meta:
