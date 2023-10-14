@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django_default_secret_key')
 
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split()
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', ',').split()
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -63,7 +63,7 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': os.getenv('POSTGRES_ENGINE'),
         'NAME': os.getenv('POSTGRES_DB', 'django'),
         'USER': os.getenv('POSTGRES_USER', 'django'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
@@ -122,7 +122,6 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
     'SERIALIZERS': {
-        'user_create': 'api.serializers.CustomUserCreateSerializer',
         'user': 'api.serializers.CustomUserSerializer',
         'current_user': 'api.serializers.CustomUserSerializer',
     },
