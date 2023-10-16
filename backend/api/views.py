@@ -22,7 +22,7 @@ from .serializers import (
     RecipeSerializer,
     RecipeCreateUpdateSerializer,
     RecipeCutSerializer,
-    CustomUserSerializer,
+    UserSerializer,
     SubscribeSerializer
 )
 from .filters import IngredientSearchFilter, RecipeFilter
@@ -130,7 +130,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class UserViewSet(viewsets.GenericViewSet):
     queryset = User.objects.all()
-    serializer_class = CustomUserSerializer
+    serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     @action(
