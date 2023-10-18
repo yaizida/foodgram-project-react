@@ -109,6 +109,7 @@ docker-compose -f docker-compose.yml up -d
 - После запуска проект будут доступен по адресу: [http://localhost/](http://localhost/)
 
 - Работу можно посмотреть по ссылке: (https://izidaandkittygram.myftp.biz/signin)
-- login - admin_2
-- password - admin_2
+- login - admin
+- password - admin
+- email - admin@admin.ru
 ### Автор - Бурковский Никита
