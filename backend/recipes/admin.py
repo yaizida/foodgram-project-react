@@ -7,7 +7,6 @@ from .models import (
     Tag,
     Recipe,
     IngredientRecipe,
-    TagRecipe,
     Favorite,
     ShoppingCart
 )
@@ -67,12 +66,6 @@ class TagRecipeForm(BaseInlineFormSet):
                 )
 
 
-class TagRecipeInLine(admin.TabularInline):
-    model = TagRecipe
-    min_num = 1
-    formset = TagRecipeForm
-
-
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
@@ -83,7 +76,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     list_filter = ('author', 'tags')
     search_fields = ('name',)
-    inlines = (IngredientRecipeInLine, TagRecipeInLine)
+    inlines = (IngredientRecipeInLine)
 
     def count_favorite(self, obj):
         return obj.favorites.count()

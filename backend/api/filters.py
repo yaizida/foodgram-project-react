@@ -1,15 +1,11 @@
 from django_filters import rest_framework as rf_filters
 from rest_framework import filters
 
-from recipes.models import Ingredient, Recipe, Tag
+from recipes.models import Recipe, Tag
 
 
 class IngredientSearchFilter(filters.SearchFilter):
-    name = filters.CharFilter(lookup_expr='istartswith')
-
-    class Meta:
-        fields = ('name', )
-        model = Ingredient
+    search_param = 'name'
 
 
 class RecipeFilter(rf_filters.FilterSet):

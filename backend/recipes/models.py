@@ -2,16 +2,21 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from colorfield.fields import ColorField
 from django.conf import settings
+from django.core.validators import RegexValidator
 
 from users.models import User
-from users.validators import alphabet_validator
+
+alphabet_validator = RegexValidator(r'^[a-zA-Zа-яА-я]*$',
+                                    'Only alphanumeric characters are allowed.'
+                                    )
 
 
 class Ingredient(models.Model):
     name = models.CharField(
         'Название',
         max_length=settings.MAX_LENGTH,
-        validators=[alphabet_validator]
+        validators=[alphabet_validator],
+        unique=True,
     )
     measurement_unit = models.CharField(
         'Единицы измерения',
@@ -153,18 +158,17 @@ class Favorite(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='+'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
-        related_name='+',
     )
 
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
+        default_related_name = 'favorites+'
         constraints = [
             models.UniqueConstraint(fields=['user', 'recipe'],
                                     name='unique_favorite'),
@@ -179,18 +183,17 @@ class ShoppingCart(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='recipe+'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Изб. рецепт',
-        related_name='+',
     )
 
     class Meta:
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
+        default_related_name = 'shoping_cart+'
         constraints = [
             models.UniqueConstraint(fields=['user', 'recipe'],
                                     name='unique_shopping_cart'),

@@ -27,3 +27,4 @@ typing_extensions==4.7.1
 urllib3==1.26.6
 webcolors==1.13
 gunicorn==20.1.0
+drf-extra-fields==3.4.0

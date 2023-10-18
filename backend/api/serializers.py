@@ -1,8 +1,8 @@
+from drf_extra_fields.fields import Base64ImageField
 from django.conf import settings
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers, validators
-from drf_extra_fields.fields import Base64ImageField
 
 from users.models import User, Subscribe
 from recipes.models import (
@@ -124,7 +124,7 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
     )
     author = UserSerializer(read_only=True)
     ingredients = IngredientRecipeCreateSerializer(many=True, required=True)
-    image = Base64ImageField(max_length=None, use_url=True)
+    image = Base64ImageField()
     cooking_time = serializers.IntegerField(write_only=True)
 
     class Meta:
@@ -252,7 +252,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
                 recipes = recipes[:int(recipes_limit)]
                 return RecipeCutSerializer(recipes, many=True).data
             except ValueError as error:
-                print(f'{error}, check recipes_limit')
+                return (f'{error}, check recipes_limit')
         else:
             queryset = obj.author_recipes.count()
             return SubscribeSerializer(queryset, many=True).data

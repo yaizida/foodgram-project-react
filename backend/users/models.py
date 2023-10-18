@@ -1,9 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.validators import RegexValidator
 from django.conf import settings
 
-from validators import alphabet_validator
+
+alphabet_validator = RegexValidator(r'^[a-zA-Zа-яА-я]*$',
+                                    'Only alphanumeric characters are allowed.'
+                                    )
 
 
 class User(AbstractUser):
